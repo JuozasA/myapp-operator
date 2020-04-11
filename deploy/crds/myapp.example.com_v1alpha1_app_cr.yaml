@@ -1,0 +1,10 @@
+apiVersion: myapp.cloud-ninja.name/v1alpha1
+kind: App
+metadata:
+  name: myapp
+spec:
+  size: 1
+  weburl: app.apps.quay-poc.cloud-ninja.name
+  image: quay.io/jauskaln/nodejs:10
+#  dbpassword: 'password123'
+#  dbadminpasswd: 'admin-password123'

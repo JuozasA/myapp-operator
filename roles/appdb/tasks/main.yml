@@ -1,0 +1,124 @@
+---
+# tasks file for nodeapp
+- name: Create Mongodb credentials Secret
+  k8s:
+    definition:
+      kind: Secret
+      apiVersion: v1
+      metadata:
+        name: '{{meta.name}}'
+        namespace: '{{meta.namespace}}'
+      stringData:
+        database-password: '{{dbpassword}}'
+        database-admin-password : '{{dbadminpasswd}}'
+
+- name: Create Mongo Service
+  k8s:
+    definition:
+      kind: Service
+      apiVersion: v1
+      metadata:
+        name: 'mongodb'
+        namespace: '{{meta.namespace}}'
+        annotations:
+          description: 'Exposes the database server'
+        labels:
+          app: 'mongodb'
+      spec:
+        ports:
+          - name: mongodb
+            port: 27017
+            targetPort: 27017
+        selector:
+          app: 'mongodb'
+
+- name: Create headless Mongo Service
+  k8s:
+    definition:
+      kind: Service
+      apiVersion: v1
+      metadata:
+        name: 'mongodb-internal'
+        namespace: '{{meta.namespace}}'
+        labels:
+          app: 'mongodb'
+        annotations:
+          service.alpha.kubernetes.io/tolerate-unready-endpoints: 'true'
+      spec:
+        clusterIP: None
+        ports:
+          - name: mongodb
+            port: 27017
+        selector:
+          app: 'mongodb'
+
+
+- name: Create Mongo StatefulSet
+  k8s:
+    definition:
+      kind: StatefulSet
+      apiVersion: apps/v1
+      metadata:
+        name: '{{meta.name}}'
+        namespace: '{{meta.namespace}}'
+        annotations:
+          description: 'Defines how to deploy the database'
+          template.alpha.openshift.io/wait-for-ready: 'true'
+      spec:
+        replicas: '{{size}}'
+        serviceName: 'mongodb-internal'
+        selector:
+          matchLabels:
+            app: 'mongodb'
+        template:
+          metadata:
+            labels:
+              app: 'mongodb'
+          spec:
+            containers:
+              - name: mongodb
+                image: '{{image}}'
+                ports:
+                  - containerPort: 27017
+                args:
+                  - 'run-mongod-replication'
+                env:
+                  - name: MONGODB_USER
+                    value: '{{dbuser}}'
+                  - name: MONGODB_PASSWORD
+                    valueFrom:
+                      secretKeyRef :
+                        name : '{{meta.name}}'
+                        key : database-password
+                  - name: MONGODB_DATABASE
+                    value: '{{dbname}}'
+                  - name: MONGODB_ADMIN_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: '{{meta.name}}'
+                        key: database-admin-password
+                  - name: MONGODB_REPLICA_NAME
+                    value: 'rs0'
+                  - name: MONGODB_KEYFILE_VALUE
+                    value: '12345678901234567890'
+                  - name: MONGODB_SERVICE_NAME
+                    value: 'mongodb-internal'
+                readinessProbe:
+                  timeoutSeconds: 1
+                  initialDelaySeconds: 3
+                  exec:
+                    command:
+                      - stat
+                      - /tmp/initialized
+                volumeMounts:
+                  - name: '{{meta.name}}-data'
+                    mountPath: /var/lib/mongodb/data
+        volumeClaimTemplates:
+        - metadata:
+            name: '{{meta.name}}-data'
+          spec:
+            accessModes: [ "ReadWriteOnce" ]
+            storageClassName: "{{ storage_class_name }}"
+            resources:
+              requests:
+                storage: 1Gi

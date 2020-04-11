@@ -1,0 +1,11 @@
+apiVersion: myapp.cloud-ninja.name/v1alpha1
+kind: AppDB
+metadata:
+  name: myappdb
+spec:
+  # Add fields here
+  size: 3
+  storage_class_name: 'managed-premium'
+  image: image-registry.openshift-image-registry.svc:5000/openshift/mongodb:3.6
+#  dbpassword: 'password123'
+#  dbadminpasswd: 'admin-password123'

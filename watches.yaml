@@ -1,0 +1,21 @@
+---
+- version: v1alpha1
+  group: myapp.cloud-ninja.name
+  kind: App
+  role: /opt/ansible/roles/app
+  maxRunnerArtifacts: 30
+  reconcilePeriod: 5s
+  blacklist:
+    - group: broker.amq.io
+      version: v2alpha2
+      kind: ActiveMQArtemis
+  finalizer:
+    name: finalizer.myapp.cloud-ninja.name
+    playbook: /opt/ansible/playbooks/destroy.yml
+
+- version: v1alpha1
+  group: myapp.cloud-ninja.name
+  kind: AppDB
+  role: /opt/ansible/roles/appdb
+  maxRunnerArtifacts: 30
+  reconcilePeriod: 5s
