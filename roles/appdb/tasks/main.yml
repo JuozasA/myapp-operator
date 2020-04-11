@@ -1,7 +1,7 @@
 ---
 # tasks file for nodeapp
 - name: Create Mongodb credentials Secret
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Secret
       apiVersion: v1
@@ -13,7 +13,7 @@
         database-admin-password : '{{dbadminpasswd}}'
 
 - name: Create Mongo Service
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Service
       apiVersion: v1
@@ -33,7 +33,7 @@
           app: 'mongodb'
 
 - name: Create headless Mongo Service
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Service
       apiVersion: v1
@@ -54,7 +54,7 @@
 
 
 - name: Create Mongo StatefulSet
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: StatefulSet
       apiVersion: apps/v1

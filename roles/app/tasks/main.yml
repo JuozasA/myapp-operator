@@ -1,7 +1,7 @@
 ---
 # tasks file for nodeapp
 - name: Create app Secret with mongo credentials
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Secret
       apiVersion: v1
@@ -13,7 +13,7 @@
         database-admin-password : '{{dbadminpasswd}}'
 
 - name: Create OperatorGroup for node.js namespace
-  k8s:
+  community.kubernetes.k8s:
     definition:
       apiVersion: operators.coreos.com/v1
       kind: OperatorGroup
@@ -25,7 +25,7 @@
           - '{{ meta.namespace }}'
 
 - name: Subscribe to AMQ Operator
-  k8s:
+  community.kubernetes.k8s:
     definition:
       apiVersion: operators.coreos.com/v1alpha1
       kind: Subscription
@@ -41,7 +41,7 @@
         startingCSV: amq-broker-operator.v0.13.0
 
 - name: Create Node Service
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Service
       apiVersion: v1
@@ -62,7 +62,7 @@
           app: '{{meta.name}}'
 #Ingress
 - name: Create Ingress Route
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Route
       apiVersion: v1
@@ -76,7 +76,7 @@
           name: '{{meta.name}}'
 
 - name: Start app Deployment
-  k8s:
+  community.kubernetes.k8s:
     definition:
       kind: Deployment
       apiVersion: v1
@@ -135,7 +135,7 @@
                     memory: 3Gi
 
 - name: Deploy Amq Artemis instance
-  k8s:
+  community.kubernetes.k8s:
     definition:
       apiVersion: broker.amq.io/v2alpha2
       kind: ActiveMQArtemis
