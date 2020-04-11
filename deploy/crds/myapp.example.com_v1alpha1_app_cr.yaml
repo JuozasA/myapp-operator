@@ -1,7 +1,7 @@
 apiVersion: myapp.cloud-ninja.name/v1alpha1
 kind: App
 metadata:
-  name: myapp
+  name: nodejs-myapp
 spec:
   size: 1
   weburl: app.apps.quay-poc.cloud-ninja.name
