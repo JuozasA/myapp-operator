@@ -3,10 +3,15 @@ Example of Ansible Operator controlled Node.js app with MongoDB database
 
 Example of Ansible Operator controlled Node.js app with MongoDB database and AMQ Broker operator (not connected to Node.js)
 
+Prereqs
+=
+* oc binary (version depends on your OCP version)
+* git (to clone the repository)
+
 Deploy
 =
 
-* Make sure you are logged in as a User with cluster admin permissions
+* Make sure you are logged in as a User with `cluster-admin` permissions.
 
 Deploy resources:
 ```
@@ -18,10 +23,10 @@ oc create -f deploy/role_binding.yaml
 oc create -f deploy/operator.yaml
 ```
 
-Once our operator is running and is listening for changes, let's create our App and AppDB Custom Resources:
+* Once our operator is running and is listening for changes, let's create our App and AppDB Custom Resources:
 
-Open /deploy/crds/myapp.example.com_v1alpha1_app_cr.yaml and change `weburl` parameter to your prefered route hostname.
-Open /deploy/crds/myapp.example.com_v1alpha1_appdb_cr.yaml and change `storage_class_name` parameter to your prefered StorageClass for dynamic PV provisioning for MongoDB StatefulSet.
+* Open /deploy/crds/myapp.example.com_v1alpha1_app_cr.yaml and change `weburl` parameter to your prefered route hostname.
+* Open /deploy/crds/myapp.example.com_v1alpha1_appdb_cr.yaml and change `storage_class_name` parameter to your prefered StorageClass for dynamic PV provisioning for MongoDB StatefulSet.
 
 ```
 oc create -f deploy/crds/myapp.cloud-ninja.name_v1alpha1_app_cr.yaml
