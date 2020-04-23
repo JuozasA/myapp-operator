@@ -25,8 +25,8 @@ oc create -f deploy/operator.yaml
 
 * Once our operator is running and is listening for changes, let's create our App and AppDB Custom Resources:
 
-* Open /deploy/crds/myapp.example.com_v1alpha1_app_cr.yaml and change `weburl` parameter to your prefered route hostname.
-* Open /deploy/crds/myapp.example.com_v1alpha1_appdb_cr.yaml and change `storage_class_name` parameter to your prefered StorageClass for dynamic PV provisioning for MongoDB StatefulSet.
+* Open `/deploy/crds/myapp.example.com_v1alpha1_app_cr.yaml` and change `weburl` parameter to your prefered route hostname.
+* Open `/deploy/crds/myapp.example.com_v1alpha1_appdb_cr.yaml` and change `storage_class_name` parameter to your prefered StorageClass for dynamic PV provisioning for MongoDB StatefulSet.
 
 ```
 oc create -f deploy/crds/myapp.cloud-ninja.name_v1alpha1_app_cr.yaml
