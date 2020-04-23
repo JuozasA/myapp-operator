@@ -1,7 +1,7 @@
 Example of Ansible Operator controlled Node.js app with MongoDB database
 ==
 
-Example of Ansible Operator controlled Node.js app with MongoDB database and AMQ Broker operator (not connected to Node.js)
+Example of Ansible Operator controlled Node.js app with MongoDB database. Example creates AMQ Broker operator with Artemis instances but they are not connected/integrated into Node.js app. It is purely to show how OLM operators can be integrated into Ansible Operator.
 
 Prereqs
 =
